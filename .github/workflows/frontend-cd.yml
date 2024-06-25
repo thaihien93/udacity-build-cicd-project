@@ -61,7 +61,7 @@ jobs:
 
       - name: Build Docker image
         env:
-          REACT_APP_MOVIE_API_URL: $(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName' --output text)
+          REACT_APP_MOVIE_API_URL: ${(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName' --output text)}
         run: |
           cd ./starter/frontend
           docker build -t frontend --build-arg=REACT_APP_MOVIE_API_URL=${{ env.REACT_APP_MOVIE_API_URL }} .
