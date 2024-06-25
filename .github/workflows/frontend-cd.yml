@@ -59,17 +59,13 @@ jobs:
           secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: ${{ vars.AWS_DEFAULT_REGION }}
 
-      - name: Get ELB DNS Name
-        id: get-elb-dns
-        run: |
-          ELB_DNS=$(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName' --output text)
-          echo "::set-env name=REACT_APP_MOVIE_API_URL::$ELB_DNS"
-
       - name: Build Docker image
         run: |
           cd ./starter/frontend
-          echo "Deploying frontend with REACT_APP_MOVIE_API_URL: $REACT_APP_MOVIE_API_URL"
-          docker build -t frontend --build-arg=REACT_APP_MOVIE_API_URL=${{ env.REACT_APP_MOVIE_API_URL }} .
+          ELB_URL=$(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName' --output text)
+          echo "ELB_URL=${ELB_URL}"
+          echo "Deploying frontend with REACT_APP_MOVIE_API_URL: ${ELB_URL}"
+          docker build -t frontend --build-arg=REACT_APP_MOVIE_API_URL=${ELB_URL} .
       
       - name: Tag Docker Image
         run: |
