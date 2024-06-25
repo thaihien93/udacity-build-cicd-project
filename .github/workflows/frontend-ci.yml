@@ -65,7 +65,7 @@ jobs:
         run: cd ./starter/frontend && npm run test
 
   build-frontend-ci:
-    needs: [lint, test]
+    needs: [build-backend-cd, lint, test]
     runs-on: ubuntu-latest
 
     steps:
