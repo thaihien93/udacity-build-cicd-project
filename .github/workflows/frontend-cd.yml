@@ -4,11 +4,6 @@ on:
     workflows: ["Frontend CI"]
     types:
       - completed
-  # workflow_dispatch:
-
-  # pull_request:
-  #   branches:
-  #     - main
 
 jobs:
   build-frontend-cd:
