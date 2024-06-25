@@ -82,16 +82,3 @@ jobs:
         run: |
           cd ./starter/backend
           docker build -t backend .
-        
-      - name: Trigger backend-cd workflow
-        uses: actions/github-script@v3
-        with:
-          script: |
-            const github = require('@actions/github');
-            const context = github.context;
-            github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'backend-cd.yaml',
-              ref: context.ref,
-            });
