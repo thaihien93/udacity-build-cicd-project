@@ -1,13 +1,18 @@
 name: 'Frontend CD'
 on:
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Frontend CI"]
+    types:
+      - completed
+  # workflow_dispatch:
 
-  pull_request:
-    branches:
-      - main
+  # pull_request:
+  #   branches:
+  #     - main
 
 jobs:
   build-frontend-cd:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -54,10 +59,24 @@ jobs:
           secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: ${{ vars.AWS_DEFAULT_REGION }}
 
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: backend-cd-artifact
+          path: artifacts
+
+      - name: Read API URL
+        id: read-api-url
+        run: |
+          REACT_APP_MOVIE_API_URL=$(cat artifacts/REACT_APP_MOVIE_API_URL.txt)
+          echo "API URL: $REACT_APP_MOVIE_API_URL"
+
       - name: Build Docker image
+        env:
+          REACT_APP_MOVIE_API_URL: ${{ steps.read-api-url.outputs.REACT_APP_MOVIE_API_URL }}
         run: |
           cd ./starter/frontend
-          docker build -t frontend --build-arg=REACT_APP_MOVIE_API_URL=${{ vars.REACT_APP_MOVIE_API_URL }} .
+          docker build -t frontend --build-arg=REACT_APP_MOVIE_API_URL=${{ env.REACT_APP_MOVIE_API_URL }} .
       
       - name: Tag Docker Image
         run: |
