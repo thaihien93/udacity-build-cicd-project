@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-backend-cd:
-    needs: backend-ci.build-backend-ci
+    needs: backend-ci.jobs.build-backend-ci
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
