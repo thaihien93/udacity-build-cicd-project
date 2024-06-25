@@ -59,21 +59,9 @@ jobs:
           secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: ${{ vars.AWS_DEFAULT_REGION }}
 
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: backend-cd-artifact
-          path: artifacts
-
-      - name: Read API URL
-        id: read-api-url
-        run: |
-          REACT_APP_MOVIE_API_URL=$(cat artifacts/REACT_APP_MOVIE_API_URL.txt)
-          echo "API URL: $REACT_APP_MOVIE_API_URL"
-
       - name: Build Docker image
         env:
-          REACT_APP_MOVIE_API_URL: ${{ steps.read-api-url.outputs.REACT_APP_MOVIE_API_URL }}
+          REACT_APP_MOVIE_API_URL: $(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName' --output text)
         run: |
           cd ./starter/frontend
           docker build -t frontend --build-arg=REACT_APP_MOVIE_API_URL=${{ env.REACT_APP_MOVIE_API_URL }} .
