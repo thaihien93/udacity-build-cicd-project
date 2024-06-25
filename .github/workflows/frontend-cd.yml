@@ -9,7 +9,7 @@ on:
 jobs:
   build-frontend-cd:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: checkout code
         uses: actions/checkout@v3
@@ -57,7 +57,7 @@ jobs:
       - name: Build Docker image
         run: |
           cd ./starter/frontend
-          docker build -t frontend --build-arg=REACT_APP_MOVIE_API_URL=${{ vars.REACT_APP_MOVIE_API_URL }} .
+          docker build -t frontend --build-arg=REACT_APP_MOVIE_API_URL=${{ needs.build-backend-cd.outputs.elb-url }} .
       
       - name: Tag Docker Image
         run: |
