@@ -77,5 +77,5 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           cd ./starter/frontend/k8s
-          kustomize edit set image frontend=${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
+          kustomize edit set image frontend=${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/frontend:${GITHUB_SHA::7}
           kustomize build | kubectl apply -f -
