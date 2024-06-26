@@ -57,8 +57,7 @@ jobs:
       - name: Build Docker image
         run: |
           cd ./starter/frontend
-          ELB_URL=$(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[0].DNSName' --output text)
-          echo "ELB_URL=${ELB_URL}"
+          ELB_URL=$(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[1].DNSName' --output text)
           echo "Deploying frontend with REACT_APP_MOVIE_API_URL: ${ELB_URL}"
           docker build -t frontend --build-arg=REACT_APP_MOVIE_API_URL=${ELB_URL} .
       
