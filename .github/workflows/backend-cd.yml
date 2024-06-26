@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-      
+
   workflow_dispatch:
 
 jobs:
-  build-backend-cd:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
