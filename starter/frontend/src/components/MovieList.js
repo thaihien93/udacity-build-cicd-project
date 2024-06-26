@@ -13,7 +13,6 @@ function MovieList({ onMovieClick }) {
 
   return (
     <ul>
-      <b>{process.env.REACT_APP_MOVIE_API_URL}</b>
       {movies.map((movie) => (
         <li className="movieItem" key={movie.id} onClick={() => onMovieClick(movie)}>
           {movie.title}
