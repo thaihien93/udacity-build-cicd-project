@@ -1,13 +1,13 @@
 name: 'Frontend CI'
 on:
-  workflow_run:
-    workflows: ["Backend CD"]
-    types:
-      - completed
+  workflow_dispatch:
+
+  pull_request:
+    branches:
+      - main
 
 jobs:
   lint:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Linting
     runs-on: ubuntu-latest 
 
@@ -39,7 +39,6 @@ jobs:
         run: cd ./starter/frontend && npm run lint
 
   test:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Testing job
     runs-on: ubuntu-latest
 
@@ -65,7 +64,7 @@ jobs:
       - name: Run test
         run: cd ./starter/frontend && npm run test
 
-  build-frontend-ci:
+  build:
     needs: [lint, test]
     runs-on: ubuntu-latest
 

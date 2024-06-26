@@ -2,7 +2,7 @@ name: 'Backend CI'
 on:
   workflow_dispatch:
 
-  push:
+  pull_request:
     branches:
       - main
 
@@ -70,7 +70,7 @@ jobs:
           cd ./starter/backend 
           pipenv run test
         
-  build-backend-ci:
+  build:
     needs: [lint, test]
     runs-on: ubuntu-latest 
 
