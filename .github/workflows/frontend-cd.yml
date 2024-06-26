@@ -1,4 +1,4 @@
-name: 'Frontend CD'
+name: 'Frontend CD run after Backend CD success'
 on:
 
   workflow_run:
